@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Keystroke Dynamics Capture Demo</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    #log { border: 1px solid #ccc; padding: 10px; height: 150px; overflow: auto; }
+  </style>
+</head>
+<body>
+  <h1>Keystroke Dynamics Capture Demo</h1>
+  <p>Type in the text box below to capture keystroke timings.</p>
+  <textarea id="inputBox" rows="6" cols="50"></textarea>
+  <br/><br/>
+  <button id="analyzeBtn">Analyze Keystrokes</button>
+  <button id="predictBtn">Predict Authentication</button>
+  <h2>Keystroke Log:</h2>
+  <div id="log"></div>
+  <script>
+    const inputBox = document.getElementById("inputBox");
+    const logDiv = document.getElementById("log");
+    let keystrokes = [];
+    let lastTimestamp = null;
+    inputBox.addEventListener("keydown", (e) => {
+      const currentTime = Date.now();
+      if (lastTimestamp !== null) {
+        const interval = currentTime - lastTimestamp;
+        keystrokes.push({ key: e.key, interval: interval });
+        logDiv.innerHTML += `<p>${e.key} - ${interval} ms</p>`;
+      }
+      lastTimestamp = currentTime;
+    });
+    document.getElementById("analyzeBtn").addEventListener("click", () => {
+      fetch("http://localhost:8000/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ keystrokes: keystrokes })
+      })
+      .then(response => response.json())
+      .then(data => { alert("Analysis Result: " + JSON.stringify(data)); })
+      .catch(error => { console.error("Error:", error); });
+    });
+    document.getElementById("predictBtn").addEventListener("click", () => {
+      fetch("http://localhost:8000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ keystrokes: keystrokes })
+      })
+      .then(response => response.json())
+      .then(data => { alert("Prediction Result: " + JSON.stringify(data)); })
+      .catch(error => { console.error("Error:", error); });
+    });
+  </script>
+</body>
+</html>
