@@ -1,95 +1,157 @@
-# Keystroke Dynamics Demo
+# 🔐 Keystroke Dynamics Biometric Authentication Demo
 
-This project demonstrates a keystroke dynamics system that captures typing patterns via a web interface and uses a FastAPI backend to analyze and simulate authentication predictions. The objective is to explore behavioral biometrics for user authentication using dummy machine learning models.
+This project demonstrates a **proof-of-concept for biometric authentication using keystroke dynamics**. It captures a user's typing pattern for a fixed password and uses machine learning models to authenticate against a predefined user.
 
-## Features
+---
 
-- **Keystroke Data Capture:**  
-  An HTML front-end captures keystroke timings, including key presses and the intervals between them.
+## 🚀 Overview
 
-- **Data Analysis:**  
-  The backend provides an `/analyze` endpoint to extract features from the keystroke data, such as the total number of keystrokes and the average interval between them.
+The system comprises:
+- A **FastAPI** backend for data processing and ML predictions
+- A **lightweight HTML/CSS/JavaScript** frontend for interaction
 
-- **Simulated Authentication Prediction:**  
-  A `/predict` endpoint simulates predictions using dummy logic for three models:
-  - **LSTM Model:** Authenticates if the average interval is less than 200 ms.
-  - **SVM Model:** Authenticates if the total number of keystrokes is more than 5.
-  - **Random Forest Model:** Authenticates if the average interval is less than 250 ms.  
-  A majority vote among these predictions determines the final authentication result.
+All incoming typing patterns are compared to a fixed target user's learned behavior (`Subject ID: s002`) using pre-trained models.
 
-## Project Structure
+---
+
+## ✨ Features
+
+- 🎯 **Keystroke Capture**: Records keydown and keyup events precisely
+- 🔍 **Feature Extraction**: Computes Hold time, Down-Down time, and Up-Down time
+- 🤖 **ML Predictions**:
+  - LSTM Neural Network
+  - Random Forest
+  - Support Vector Machine
+- 🗳️ **Majority Voting**: Combines model outputs for final verdict
+- 🧑‍💻 **Frontend UI**: Easy-to-use typing interface with real-time results
+
+---
+
+## 🛠️ Technology Stack
+
+| Component      | Tech |
+|----------------|------|
+| **Backend**    | FastAPI, Uvicorn, Python 3 |
+| **ML**         | TensorFlow/Keras, Scikit-learn, Pandas, NumPy |
+| **Frontend**   | HTML5, CSS3, JavaScript |
+
+---
+
+## 📁 Project Structure
 
 ```
-keystroke-dynamics-demo/
-├── index.html       # Front-end to capture keystroke data
-├── backend.py       # FastAPI backend with analysis and prediction endpoints
-└── README.md        # Project documentation
+keystroke-dynamics/
+├── backend.py                 # FastAPI app
+├── training_script.py         # Model training script
+├── models/                    # Trained models
+│   ├── lstm_model.h5
+│   ├── rf_model.joblib
+│   ├── svm_model.joblib
+│   └── scaler.joblib
+├── data/
+│   └── keystroke_data.csv     # Dataset for training
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+├── requirements.txt
+├── README.md
+└── venv/                      # Python virtual environment
 ```
 
-## How to Run
+---
 
-1. **Install Dependencies:**  
-   Ensure you have Python installed, then install the required packages:
-   ```
-   pip install fastapi uvicorn pydantic
-   ```
+## ⚙️ Setup & Installation
 
-2. **Start the Backend Server:**  
-   Navigate to the project directory and run:
-   ```
-   uvicorn backend:app --reload
-   ```
-   This will start the FastAPI server on port 8000 with automatic reload on code changes.
+### ✅ Prerequisites
 
-3. **Open the Front-End:**  
-   Open `index.html` in your web browser. Use the provided buttons to submit keystroke data for analysis and prediction, and view the results via alerts.
+- Python 3.8+
+- `pip`
 
-## API Endpoints
+---
 
-- **POST /analyze**  
-  - **Description:** Analyze keystroke data to calculate total keystrokes and average interval.
-  - **Request JSON Format:**
-    ```json
-    {
-      "keystrokes": [
-        {"key": "a", "interval": 120},
-        {"key": "b", "interval": 150}
-      ]
-    }
-    ```
-  - **Response Example:**
-    ```json
-    {
-      "message": "Data analyzed successfully",
-      "total_keys": 10,
-      "average_interval": 180.0
-    }
-    ```
+### 1️⃣ Clone the Repository
 
-- **POST /predict**  
-  - **Description:** Predict authentication status using simulated ML predictions.
-  - **Request JSON Format:** Same as `/analyze`
-  - **Response Example:**
-    ```json
-    {
-      "predictions": {
-        "LSTM": "Authenticated",
-        "SVM": "Not Authenticated",
-        "RandomForest": "Authenticated"
-      },
-      "final_prediction": "Authenticated",
-      "total_keys": 10,
-      "average_interval": 180.0
-    }
-    ```
+```bash
+git clone <repository_url>
+cd keystroke-dynamics
+```
 
-## Future Enhancements
+---
 
-- Replace dummy logic with actual machine learning models (e.g., LSTM, SVM, Random Forest) trained on keystroke dynamics data.
-- Enhance feature extraction and preprocessing techniques.
-- Improve the user interface with real-time visualization of typing patterns.
-- Implement security features for data encryption and secure transmission.
+### 2️⃣ Create & Activate Virtual Environment
 
-## License
+```bash
+python -m venv venv
+```
 
-This project is licensed under the MIT License.
+Activate:
+
+- **Windows**: `.\venv\Scripts\activate`
+- **macOS/Linux**: `source venv/bin/activate`
+
+---
+
+### 3️⃣ Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Or manually:
+
+```bash
+pip install fastapi uvicorn pandas scikit-learn tensorflow keras joblib numpy
+```
+
+---
+
+### 4️⃣ Train ML Models
+
+Ensure `data/keystroke_data.csv` exists.
+
+```bash
+python training_script.py
+```
+
+This will generate:
+- `lstm_model.h5`
+- `rf_model.joblib`
+- `svm_model.joblib`
+- `scaler.joblib`
+
+in the `models/` directory.
+
+---
+
+## ▶️ Running the Application
+
+### 🔥 Start Backend
+
+```bash
+python backend.py
+```
+
+Visit: [http://localhost:8000](http://localhost:8000)
+
+---
+
+### 💻 Access Frontend
+
+Your browser will open the interactive interface served from `index.html`.
+
+---
+
+## 🧪 How to Use
+
+1. **Type the password**: `.tie5Roanl`
+2. **Set Subject ID**: Default is `s002`
+3. **Press Enter**: After typing the full password
+4. **See Results**: Predictions from LSTM, SVM, RF + final decision
+5. **Reset Demo**: Try again with different rhythm or ID (e.g., `s003`)
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.
