@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keystroke Dynamics Authentication Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="app-header">
+        <h1><i class="fas fa-keyboard"></i> Keystroke Dynamics Demo</h1>
+        <p>Analyze typing patterns for authentication.</p>
+    </header>
+
+    <main class="container">
+        <section class="card input-section">
+            <h2>1. Type Password</h2>
+            <p class="instruction">Please type the password: <strong id="password-display">.tie5Roanl</strong></p>
+            <div class="input-wrapper">
+                <input type="text" id="password-input" placeholder="Start typing here..." autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <span id="typing-feedback" class="feedback-text typing-inactive">Ready</span>
+            </div>
+            <p class="small-text">Press <kbd>Enter</kbd> after typing the full password.</p>
+            <p class="message-text error-message" id="error-message"></p>
+            <p class="message-text info-message" id="instruction-message"></p>
+        </section>
+
+        <section class="card subject-section">
+            <h2>2. Your Details</h2>
+            <div class="form-group">
+                <label for="subject-id">Your Subject ID:</label>
+                <input type="text" id="subject-id" value="s002" placeholder="e.g., s002">
+            </div>
+            <button id="reset-button" class="btn btn-secondary"><i class="fas fa-redo"></i> Reset Demo</button>
+        </section>
+
+        <section class="card results-section">
+            <h2>3. Authentication Results</h2>
+            <div id="loading-indicator" class="loading-spinner hidden">
+                <div class="spinner"></div>
+                <span>Processing Keystrokes...</span>
+            </div>
+            <div id="results-display" class="hidden">
+                <div class="result-summary">
+                    <p><strong>Claimant ID:</strong> <span id="res-claimant-id" class="result-value">N/A</span></p>
+                    <p><strong>Authentication Status:</strong> <span id="res-auth-status" class="result-value status-na">N/A</span></p>
+                </div>
+
+                <div class="justification-box">
+                    <p><strong>Justification:</strong> <span id="res-justification" class="result-value">N/A</span></p>
+                </div>
+
+                <h3>Model Predictions:</h3>
+                <ul class="model-predictions-list">
+                    <li><strong>LSTM:</strong> <span id="res-lstm" class="result-value status-na">N/A</span></li>
+                    <li><strong>SVM:</strong> <span id="res-svm" class="result-value status-na">N/A</span></li>
+                    <li><strong>Random Forest:</strong> <span id="res-rf" class="result-value status-na">N/A</span></li>
+                </ul>
+                <p class="final-prediction-text">
+                    <strong>Final Model Verdict:</strong> <span id="res-final-pred" class="result-value status-na">N/A</span>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2025 Keystroke Dynamics Demo. Powered by FastAPI & ML.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
